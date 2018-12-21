@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yuandage.mapper.ShareDataMapper">
+
+    <select id="queryAll" resultType="com.yuandage.entity.ShareData">
+    select * from share_data order by updateDate desc
+
+</select>
+
+    <select id="fuzzyQuery" resultType="com.yuandage.entity.ShareData">
+        select * from share_data
+        <where>
+            <if test="name=='groupName'">
+                and groupName like concat('%',#{values},'%')
+            </if>
+            <if test="name=='dataName'">
+                and dataName like concat('%',#{values},'%')
+            </if>
+        </where>
+        order by updateDate desc
+    </select>
+
+    <select id="queryDataInfo" resultType="com.yuandage.entity.ShareData">
+        select * from share_data
+        <where>
+            <if test="id!=null and id!=''">
+                and id=#{id}
+            </if>
+        </where>
+
+    </select>
+
+    <insert id="addData"  useGeneratedKeys="true" keyProperty="id" >
+        insert into share_data (groupName,dataName,ip,upName,dataSummary,createDate,updateDate)
+        <trim prefix="values(" suffix=")" prefixOverrides=",">
+            <if test="groupName!=null and groupName!=''">
+                ,#{groupName}
+            </if>
+            <if test="dataName!=null and dataName!=''">
+                ,#{dataName}
+            </if>
+            <if test="ip!=null and ip!=''">
+                ,#{ip}
+            </if>
+            <if test="upName!=null and upName!=''">
+                ,#{upName}
+            </if>
+            <if test="dataSummary!=null ">
+                ,#{dataSummary}
+            </if>
+            <if test="createDate!=null ">
+                ,#{createDate}
+            </if>
+            <if test="updateDate!=null ">
+                ,#{updateDate}
+            </if>
+
+        </trim>
+    </insert>
+
+    <!--删除资料-->
+    <delete id="deleDataById">
+
+        delete from share_data where id=#{id}
+
+    </delete>
+
+    <!--更新浏览数-->
+    <update id="updateBrowseCount">
+      update share_data set browseCount=browseCount+1 where id=#{id}
+    </update>
+
+    <!--资料简介修改-->
+    <update id="updateDataSummary">
+        update share_data set dataSummary= #{dataSummary} , updateDate=#{updateDate} where id=#{id}
+    </update>
+
+</mapper>
