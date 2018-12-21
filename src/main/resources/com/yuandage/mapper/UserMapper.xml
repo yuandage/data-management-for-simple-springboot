@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yuandage.mapper.UserMapper">
+
+    <select id="findByName" parameterType="String" resultType="com.yuandage.entity.User">
+select id,name,password,type from user where name=#{value }
+
+</select>
+
+    <select id="findById" parameterType="int" resultType="com.yuandage.entity.User">
+select id,name,password,type from user where id=#{value }
+
+</select>
+
+    <select id="encryptPassword" resultType="string">
+        select MD5(#{password})
+    </select>
+
+
+    <insert id="signup">
+        insert into user
+        <trim prefix="values(" suffix=")" prefixOverrides=",">
+            <if test="id!=null and id!=''">
+                ,#{id}
+            </if>
+            <if test="name!=null and name!=''">
+                ,#{name}
+            </if>
+            <if test="password!=null and password!=''">
+                ,Md5(#{password})
+            </if>
+            <if test="studentClass!=null and studentClass!=''">
+                ,#{studentClass}
+            </if>
+            <if test="contact!=null and contact!=''">
+                ,#{contact}
+            </if>
+            <if test="groupName!=null and groupName!=''">
+                ,#{groupName}
+            </if>
+            <if test="type!=null and type!=''">
+                ,#{type}
+            </if>
+        </trim>
+    </insert>
+
+
+</mapper>
