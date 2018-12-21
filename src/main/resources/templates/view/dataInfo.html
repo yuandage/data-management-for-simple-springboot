@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>资料管理平台</title>
+    <link rel="stylesheet" href="/plugin/layui/css/layui.css" th:href="@{/plugin/layui/css/layui.css}" th>
+
+</head>
+
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <!--顶部和左侧导航-->
+
+    <div class="layui-header">
+        <div class="layui-logo">这里有各种学习资料!</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="/Blog/shareData/dataAllInfo" th:href="@{/shareData/dataAllInfo}">首页</a></li>
+            <li class="layui-nav-item"><a href="#">帮助</a></li>
+            <li class="layui-nav-item"><a href="#">联系我们</a></li>
+
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item"><a th:text="'当前登录状态:'+${session.status}" th:href="@{/login/loginStudentView}"></a></li>
+
+            <li class="layui-nav-item">
+                <a href="javascript:;" th:text="${session.user.name}">
+                    <img src="../custom/img/icon.jpg" class="layui-nav-img">
+                    ${user.name}
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="#">基本资料</a></dd>
+                    <dd><a href="#">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="/Blog/login/out" th:href="@{/user/out}">注销</a></li>
+        </ul>
+    </div>
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">资料管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/Blog/shareData/dataAllInfo" th:href="@{/shareData/dataAllInfo}">资料信息</a></dd>
+                        <dd><a href="/Blog/dataUploadAndDownload/show" th:href="@{/dataUploadAndDownload/show}">上传资料</a></dd>
+                        <dd><a href="/Blog/dataUploadAndDownload/downloadAll" th:href="@{/dataUploadAndDownload/downloadAll}">下载资料</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">资料交流分享</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">下载排行榜</a></dd>
+                        <dd><a href="javascript:;">分享心得</a></dd>
+                    </dl>
+                </li>
+
+            </ul>
+            <div class="contain-zheng">
+                <div class="box">
+                    <div class="face one"></div>
+                    <div class="face two"></div>
+                    <div class="face three"></div>
+                    <div class="face four"></div>
+                    <div class="face five"></div>
+                    <div class="face six"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 内容主体区域 -->
+    <div class="layui-body">
+
+        <div style="padding: 15px;">
+            <form action="/Blog/shareData/fuzzyQuery" th:action="@{/shareData/fuzzyQuery}" method="post">
+                <input type="radio" name="name" id="radio1" value="dataName" checked="checked"><label
+                    for="radio1">按资料名称</label>
+                <input type="radio" name="name" id="radio2" value="groupName"><label for="radio2">按小组名称</label>
+                <input type="text" name="values" id="op" class="layui-input-block" style="margin: 0 10px 0 10px;">
+                <input type="submit" value="查询" class="layui-btn">
+                <button class="layui-btn"><a href="/Blog/dataUploadAndDownload/show" th:href="@{/dataUploadAndDownload/show}" style="color: white">上传资料</a></button>
+            </form>
+
+        </div>
+
+        <div style="padding: 15px;">
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th>小组名称</th>
+                    <th>资料名称</th>
+                    <th>IP</th>
+                    <th>上传人</th>
+                    <th>创建时间</th>
+                    <th>更新时间</th>
+                    <th>浏览数</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr >
+                    <td th:text="${shareData.groupName}"></td>
+                    <td th:text="${shareData.dataName}"></td>
+                    <td th:text="${shareData.ip}"></td>
+                    <td th:text="${shareData.upName}">${obj.upName}</td>
+                    <td th:text="${#dates.format(shareData.createDate, 'yyyy-MM-dd HH:mm:ss')}">2018-11-27</td>
+                    <td th:text="${#dates.format(shareData.updateDate, 'yyyy-MM-dd HH:mm:ss')}">2018-11-27</td>
+                    <td th:text="${shareData.browseCount}">${obj.browseCount}</td>
+                </tr>
+                </tbody>
+            </table>
+
+
+            <label>资料简介</label><br><br>
+            <form class="layui-form" action="/Blog/shareData/updateData" th:action="@{/shareData/updateData}" method="post">
+                <input type="hidden" name="id" th:value="${shareData.id}">
+
+                <textarea class="layui-textarea" rows="12" cols="100" name="dataSummary" th:text="${shareData.dataSummary}" th:value="${shareData.dataSummary}"></textarea>
+                <br><br>
+                <button class="layui-btn">
+                    <a  th:href="@{/shareData/deleteData/{id}(id=${shareData.id})}" >删除</a>
+                </button>
+                <button class="layui-btn" type="submit" lay-submit>修改资料</button>
+                <button class="layui-btn">
+                    <a  th:href="@{/dataUploadAndDownload/download/{id}(id=${shareData.id})}" >附件下载</a>
+                </button>
+            </form>
+
+
+        </div>
+    </div>
+
+
+    <!--底部区域-->
+    <div class="layui-footer">
+        © 袁洪201603756 and 朱兴201603753--- 版权所有,仅用于学习交流.
+    </div>
+
+</div>
+<script src="/Blog/plugin/layui/layui.js" th:src="@{/plugin/layui/layui.js}"></script>
+<script>
+
+
+    // //JavaScript代码区域
+    // layui.use('element', function () {
+    //     var element = layui.element;
+    //     console.log(element);
+    //
+    // });
+
+    // 删除信息
+    // var a=${deleteFlag};
+    // if (a==1) {
+    //     alert("删除成功!");
+    // }
+    // else{
+    //     alert("删除失败!你没有权限删除此文件!");
+    // }
+
+</script>
+</body>
+
+</html>

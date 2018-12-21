@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户登陆</title>
+    <link rel="stylesheet" type="text/css" href="../custom/css/denglu.css" th:href="@{/custom/css/denglu.css}">
+
+
+</head>
+
+<body style="background:url(../custom/img/bg-1.jpg); background-size: 100% 100%;">
+<div class="jq22-container" style="padding-top:20px">
+    <div class="login-wrap">
+        <div class="login-html">
+            <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">登陆</label>
+            <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">注册</label>
+            <div class="login-form">
+                <div class="sign-in-htm">
+                    <form action="/Blog/user/login" th:action="@{/user/login}" method="POST" >
+                        <div class="group">
+                            <label for="user" class="label">用户名</label>
+                            <input id="user" type="text" class="input" name="name">
+                        </div>
+                        <div class="group">
+                            <label for="pass" class="label">密码</label>
+                            <input id="pass" type="password" class="input" data-type="password" name="password">
+                        </div>
+                        <div class="group">
+                            <input id="check" type="checkbox" class="check" checked>
+                            <label for="check"><span class="icon"></span> 保存登陆状态</label>
+                        </div>
+                        <div class="group">
+                            <input type="submit" class="button" value="登陆">
+                        </div>
+                    </form>
+
+                    <div class="hr">
+                        <span><a style="cursor:pointer" href="/Blog/user/loginAdminView" th:href="@{/user/loginAdminView}">管理员登陆</a></span>
+                    </div>
+                    <div class="foot-lnk">
+                        <a href="#forgot">Forgot Password?</a>
+                    </div>
+                </div>
+                <div class="sign-up-htm">
+                    <form action="/Blog/user/signup" th:action="@{/user/signup}"  method="post">
+                        <div class="group">
+                            <label for="user" class="label">用户名</label>
+                            <input id="user" type="text" class="input" name="name">
+                        </div>
+                        <div class="group">
+                            <label for="pass" class="label">密码</label>
+                            <input id="pass" type="password" class="input" data-type="password" name="password">
+                        </div>
+                        <div class="group">
+                            <label for="pass" class="label">学号</label>
+                            <input id="pass" type="text" class="input" name="id">
+                        </div>
+                        <div class="group">
+                            <label for="pass" class="label">班级</label>
+                            <input id="pass" type="text" class="input" name="studentClass">
+                        </div>
+                        <div class="group">
+                            <label for="pass" class="label">联系方式</label>
+                            <input id="pass" type="text" class="input" name="contact">
+                        </div>
+                        <div class="group">
+                            <label for="pass" class="label">所在小组</label>
+                            <input id="pass" type="text" class="input" name="groupName">
+                        </div>
+                        <div class="group">
+                            <input type="submit" class="button" value="注册">
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+
+    window.onload = function () {
+        var a=${signupFlag};
+        if (a==1) {
+            alert("注册成功!快去登陆吧!");
+        }
+        else if(a==0) {
+            alert("注册失败!用户名已存在!");
+        }else if(a==-2){
+            alert("注册失败!注册信息必须全部填写!");
+        }
+
+        var form = document.getElementsByTagName("form");
+        var input = document.getElementsByTagName("input");
+        for (let i = 0; i < input.length; i++) {
+            input[i].onkeyup = function () {
+                if (input[i].value.length > 0) {   //正确的用户名
+                    input[i].style.borderColor = "green";
+                    input[i].style.borderWidth = "1px";
+                    input[i].style.borderStyle = "solid";
+                } else {    //错误的用户名
+                    input[i].style.borderColor = "red";
+                    input[i].style.borderWidth = "1px";
+                    input[i].style.borderStyle = "solid";
+                }
+            }
+        }
+
+        function checkInput() {
+            var ins = this.querySelectorAll('input');
+            var i = 0;
+            for (i = 0; i < ins.length; i++) {
+                if (ins[i].type == 'text' || ins[i].type == 'password') {
+                    if (ins[i].value.length > 0) {
+                        continue;
+                    } else {
+                        break;
+                    }
+                }
+                ;
+            }
+
+            if (i == ins.length) {
+                return true;
+            } else {
+                alert("你什么都没输入!或者,还想登录,注册,做梦吧!");
+                return false;
+            }
+
+        }
+
+        for (let i = 0; i < form.length; i++) {
+            form[i].onsubmit = checkInput;
+        }
+
+
+    }
+</script>
+
+</body>
+
+</html>
