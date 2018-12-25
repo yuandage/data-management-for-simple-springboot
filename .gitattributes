@@ -1,2 +1,3 @@
 *.java linguist-language=Java
 *.jar linguist-language=Java
+*.xml linguist-language=Java
